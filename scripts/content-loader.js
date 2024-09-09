@@ -32,7 +32,7 @@ function createContentElement(item, isTruncated = false, contentType) {
 }
 
 function loadContent(contentType, isTruncated = false) {
-    fetch(`/../${contentType}.json`)
+    fetch(`/../content/${contentType}.json`)
         .then(response => response.json())
         .then(data => {
             // Sort items by date, most recent first
