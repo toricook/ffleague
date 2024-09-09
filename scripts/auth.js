@@ -5,7 +5,7 @@ function checkAuth() {
     console.log("checkAuth function is running");
     if(localStorage.getItem("authenticated") !== "true") {
         console.log("User is not authenticated, redirecting to login page");
-        window.location.href = "/pages/login.html";
+        window.location.href = "../login.html";
     } else {
         console.log("User is authenticated");
         if (document.getElementById('auth-status')) {
