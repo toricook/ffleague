@@ -17,7 +17,7 @@ function createContentElement(item, isTruncated = false, contentType) {
         textElement.textContent = item.content.slice(0, 150) + '...';
         
         const readMoreLink = document.createElement('a');
-        readMoreLink.href = `/../pages/${contentType}.html`;
+        readMoreLink.href = `/../${contentType}.html`;
         readMoreLink.textContent = 'Read More';
         readMoreLink.className = 'read-more';
         
@@ -32,7 +32,7 @@ function createContentElement(item, isTruncated = false, contentType) {
 }
 
 function loadContent(contentType, isTruncated = false) {
-    fetch(`/../content/${contentType}.json`)
+    fetch(`/../${contentType}.json`)
         .then(response => response.json())
         .then(data => {
             // Sort items by date, most recent first
