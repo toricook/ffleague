@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy Football</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="pages/news.html">News Feed</a>
+        <a href="pages/recaps.html">Recaps</a>
+        <a href="pages/plaque.html">The Plaque</a>
+        <a href="pages/members.html">Members</a>
+        <a href="pages/archive.html">Archive</a>
+    </nav>
+  
+    <div class="container">
+      <h1>Fantasy Football League</h1>
+      <div class="grid">
+          <div class="grid-item" id="latest-news">
+              <h2>Latest News</h2>
+              <!-- Latest news article will be dynamically inserted here -->
+          </div>
+          <div class="grid-item">
+              <h2>Current Standings</h2>
+              <p>TBD!</p>
+          </div>
+          <div class="grid-item" id="latest-recaps">
+            <h2>Latest Recap</h2>
+            <!-- Latest recap will be dynamically inserted here -->
+        </div>
+      </div>
+  </div>
+
+  <script src="/scripts/auth.js"></script>
+  <script src="/scripts/content-loader.js"></script>
+  <script src="/scripts/footer-loader.js"></script>
+  <script type="text/javascript">
+    (function(l) {
+      if (l.search[1] === '/' ) {
+        var decoded = l.search.slice(1).split('&').map(function(s) { 
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+        );
+      }
+    }(window.location))
+  </script>
+  </body>
+  </html>

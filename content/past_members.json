@@ -1,0 +1,63 @@
+[
+    {
+        "name": "Isha",
+        "history": [
+          {"year": 2021, "team": "we did it joe!"}
+        ]
+    },
+    {
+        "name": "Caillin",
+        "history": [
+          {"year": 2020, "team": "Tbt to the buff ref"}
+        ]
+    },
+    {
+        "name": "Park",
+        "history": [
+          {"year": 2021, "team": "P"},
+          {"year": 2020, "team": "IAMSAM"}
+        ]
+    },
+    {
+        "name": "Hannah",
+        "history": [
+          {"year": 2019, "team": "BOob Squad"}
+        ]
+    },
+    {
+        "name": "Ashlee",
+        "history": [
+          {"year": 2019, "team": "Uhh what we doin"}
+        ]
+    },
+    {
+        "name": "Matthew",
+        "history": [
+          {"year": 2018, "team": "Matthew's Nice Team"}
+        ]
+    },
+    {
+        "name": "Andrew",
+        "history": [
+          {"year": 2018, "team": "no place like Mahome"}
+        ],"awards": ["2018 Points Leader (1838.00)"]
+    },
+    {
+        "name": "Eric",
+        "history": [
+          {"year": 2018, "team": "GORDON TO THE PATS"}
+        ]
+    },
+    {
+        "name": "Sam",
+        "history": [
+          {"year": 2018, "team": "Sam's Top Notch Team"}
+        ]
+    },
+    {
+        "name": "Taylor",
+        "history": [
+          {"year": 2018, "team": "league of daddies"}
+        ]
+    }
+]

@@ -1,0 +1,83 @@
+/*
+---COLORS
+-Gray: #595959
+-Light Gray: #808F85
+-Green (PRIMARY): #91C499
+-Whiteish: #F2E9DC
+-Bright green: #CFD11A
+*/
+
+body {
+    font-family: 'Georgia';
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #91C499;
+}
+
+h2, h3 {
+    color: #91C499
+}
+
+h1 {
+    text-align: center;
+    font-size: 3em;
+    letter-spacing: 2px;
+    font-family: 'Impact';
+    color: #595959;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #595959;
+    overflow: hidden;
+    font-family: 'Impact';
+}
+
+nav a {
+    float: left;
+    color: #F2E9DC;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+}
+
+nav a:hover {
+    background-color: #F2E9DC;
+    color: #595959;
+}
+
+.read-more {
+    display: inline-block;
+    margin-top: 10px;
+    color: #CFD11A;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+/* footer */
+footer {
+    background-color: #595959;
+    color: #F2E9DC;
+    text-align: center;
+    padding: 10px;
+  }
+
+  footer a {
+    color: #F2E9DC;
+    text-decoration: none;
+  }

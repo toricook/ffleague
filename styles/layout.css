@@ -1,0 +1,43 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+/* For pages with sidebar */
+.container-with-sidebar {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #333;
+    padding: 20px;
+    flex-shrink: 0; /* Prevent sidebar from shrinking */
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 0 0 0 20px; /* Add left padding to separate from sidebar */
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+    .container-with-sidebar {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .main-content {
+        padding: 0;
+    }
+}

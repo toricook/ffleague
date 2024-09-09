@@ -1,0 +1,172 @@
+[
+  {
+    "name": "Anisha",
+    "currentTeam": "Kansas City Queefs",
+    "history": [
+      {"year": 2023, "team": "Dark Retreat Timeshare"},
+      {"year": 2022, "team": "Like Jesus at Red Rocks"},
+      {"year": 2021, "team": "Not Not Your Mom's Team"},
+      {"year": 2020, "team": "My Stigmata Frittata"},
+      {"year": 2019, "team": "OJ Did It"},
+      {"year": 2018, "team": "The Viennese Oyster"}
+    ],
+    "awards": ["2022 Best Team Name"]
+  },
+  {
+    "name": "Aram",
+    "currentTeam": "Jefferson Airplane",
+    "history": [
+      {"year": 2023, "team": "Walk-er Waddle"},
+      {"year": 2022, "team": "Straight Outta Hopkins"},
+      {"year": 2021, "team": "Straight Outta Hopkins"},
+      {"year": 2020, "team": "Stafford Infection"},
+      {"year": 2019, "team": "Deshaun of the Dead"},
+      {"year": 2018, "team": "Kamara Sutra"}
+    ],
+    "awards": ["2022 Points Leader (1597.02)","2019 League Champ",
+    "2019 Points Leader (1996.64)"]
+  },
+  {
+    "name": "Brian",
+    "currentTeam": "Catch-Kupp and Mostert",
+    "history": [
+      {"year": 2023, "team": "Ma homes su casa"},
+      {"year": 2022, "team": "Allen Work and No Play"},
+      {"year": 2021, "team": "Suit and Tyreek"},
+      {"year": 2020, "team": "Bri's Bodacious Blrs"},
+      {"year": 2019, "team": "Waiting for Melvin"},
+      {"year": 2018, "team": "Agholorius Basterds"}
+    ],
+    "awards": ["2018 League Champ"]
+  },
+  {
+    "name": "Dani",
+    "currentTeam": "Hawk Tua",
+    "history": [
+      {"year": 2023, "team": "Ja'Farrt Chase"},
+      {"year": 2022, "team": "sKittle's Squad"},
+      {"year": 2021, "team": "Herbie Fully Loaded"},
+      {"year": 2020, "team": "PayTon 4 ManIn"},
+      {"year": 2019, "team": "#1 Draft Pick"}
+    ],
+    "awards": ["2021 League Champ", "2020 League Champ", 
+    "2020 Points Leader (1774.34)"]
+  },
+  {
+    "name": "Devan",
+    "currentTeam": "Persallverence",
+    "history": [
+      {"year": 2023, "team": "BURROW'd alive"}
+    ]
+  },
+  {
+    "name": "Emily",
+    "currentTeam": "Pukachu Gotta Catch m All",
+    "history": [
+      {"year": 2023, "team": "The Jackson 10"},
+      {"year": 2022, "team": "WILSON!!"},
+      {"year": 2021, "team": "Nah She Hairy"},
+      {"year": 2020, "team": "Me & Mahomies Wear Masks"},
+      {"year": 2019, "team": "Green Bay Slackers"},
+      {"year": 2018, "team": "Green Bay Slackers"}
+    ]
+  },
+  {
+    "name": "Harper",
+    "currentTeam": "Moral Shaquondary",
+    "history": [
+      {"year": 2023, "team": "Dak of Speed"}
+    ]
+  },
+  {
+    "name": "Jackson",
+    "currentTeam": "",
+    "history": [
+      {"year": 2023, "team": "Finding Deebo"},
+      {"year": 2022, "team": "MeNajee Trois"},
+      {"year": 2021, "team": "Davante's Inferno"},
+      {"year": 2020, "team": "Baker? I Barely Know 'Er"},
+      {"year": 2019, "team": "Finna be a Brees"},
+      {"year": 2018, "team": "Show Me Your TDs"}
+    ],
+    "awards": ["2023 Best Team Name"]
+  },
+  {
+    "name": "Jeet",
+    "currentTeam": "Amon a Roll",
+    "history": [
+      {"year": 2023, "team": "Real Madrid"},
+      {"year": 2022, "team": "Errant Rodgers"},
+      {"year": 2021, "team": "Da Bears"},
+      {"year": 2020, "team": "Bill's Cameraman"},
+      {"year": 2019, "team": "Da Bears"}
+    ]
+  },
+  {
+    "name": "Lawton",
+    "currentTeam": "Jorkin' my Penix",
+    "history": [
+      {"year": 2023, "team": "Butker's Chastity Belt"},
+      {"year": 2022, "team": "Dwayne Haskins Speedway"},
+      {"year": 2021, "team": "My Ball Zach Ertz"}
+    ]
+  },
+  {
+    "name": "Maya",
+    "currentTeam": "",
+    "history": [
+      {"year": 2023, "team": "Finding Deebo"},
+      {"year": 2022, "team": "MeNajee Trois"},
+      {"year": 2021, "team": "Davante's Inferno"},
+      {"year": 2020, "team": "Baker? I Barely Know 'Er"},
+      {"year": 2019, "team": "Finna be a Brees"},
+      {"year": 2018, "team": "Show Me Your TDs"}
+    ],
+    "awards": ["2023 Best Team Name"]
+  },
+  {
+    "name": "Nipa",
+    "currentTeam": "Moral Shaquondary",
+    "history": [
+      {"year": 2023, "team": "Dak of Speed"},
+      {"year": 2022, "team": "Dobbins the House Elf"},
+      {"year": 2021, "team": "Zeke Ye First"},
+      {"year": 2020, "team": "Nipa's Notable Team"}
+    ]
+  },
+  {
+    "name": "Rowan",
+    "currentTeam": "Persallverence",
+    "history": [
+      {"year": 2023, "team": "BURROW'd alive"},
+      {"year": 2022, "team": "Tua Lipa"}
+    ]
+  },
+  {
+    "name": "Steffan",
+    "currentTeam": "firkSER NIX-A-LOT",
+    "history": [
+      {"year": 2023, "team": "Brock N' Roll"},
+      {"year": 2022, "team": "4 Hr Independent Study"},
+      {"year": 2021, "team": "Sir LANCEalot"},
+      {"year": 2020, "team": "Kittle Corn"},
+      {"year": 2019, "team": "Love the Drake"},
+      {"year": 2018, "team": "Steffan's Team"}
+    ],
+    "awards": ["2023 League Champ","2023 Points Leader (2054.14)",
+    "2022 League Champ"]
+  },
+  {
+    "name": "Tori",
+    "currentTeam": "Lamarvelous Mrs. Taysel",
+    "history": [
+      {"year": 2023, "team": "Olave Oil"},
+      {"year": 2022, "team": "Red Solo Kupp"},
+      {"year": 2021, "team": "Teddy Dogwater"},
+      {"year": 2020, "team": "Kamara 4 the People"},
+      {"year": 2019, "team": "Dak is Bak!"},
+      {"year": 2018, "team": "Njoku's On You"}
+    ],
+    "awards": ["2021 Points Leader (1920.36)"]
+  }
+]
