@@ -30,6 +30,13 @@
     background-color: #595959;
 }
 
+/*announcements*/
+.announcement {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
 /*articles*/
 .article-date {
     color: #808F85;
