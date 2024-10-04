@@ -31,7 +31,7 @@ function createContentElement(item, isTruncated = false, contentType) {
     return contentElement;
 }
 
-function loadContent(contentType, isTruncated = false) {
+function loadContentJson(contentType, isTruncated = false) {
     fetch(`/../content/${contentType}.json`)
         .then(response => response.json())
         .then(data => {
@@ -64,6 +64,95 @@ function loadContent(contentType, isTruncated = false) {
         })
         .catch(error => console.error(`Error loading ${contentType}:`, error));
 }
+
+function loadContentMd(contentType, isTruncated = false) {
+    const containerSelector = isTruncated ? `latest-${contentType}` : `${contentType}-container`;
+    const contentContainer = document.getElementById(containerSelector);
+
+    if (!contentContainer) {
+        console.error(`Container not found: ${containerSelector}`);
+        return;
+    }
+
+    const listUrl = `/../content/${contentType}.json`;
+    console.log(`Attempting to fetch list from: ${listUrl}`);
+
+    fetch(listUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status} for ${listUrl}`);
+            }
+            return response.json();
+        })
+        .then(async fileList => {
+            console.log(`Successfully fetched file list for ${contentType}:`, fileList);
+            fileList.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            if (isTruncated || contentType === 'recaps') {
+                const fileToLoad = fileList[0];
+                console.log(`Attempting to fetch file: ${fileToLoad.filename}`);
+                const item = await fetchMarkdownFile(fileToLoad.filename);
+                const itemElement = createContentElement(item, isTruncated, contentType);
+                contentContainer.appendChild(itemElement);
+
+                if (contentType === 'recaps' && !isTruncated) {
+                    loadRecapNavigation(fileList);
+                }
+            } else if (contentType === 'news') {
+                for (const file of fileList) {
+                    console.log(`Attempting to fetch file: ${file.filename}`);
+                    const item = await fetchMarkdownFile(file.filename);
+                    const itemElement = createContentElement(item, false, contentType);
+                    contentContainer.appendChild(itemElement);
+                }
+            }
+        })
+        .catch(error => {
+            console.error(`Error in loadContent for ${contentType}:`, error);
+            console.log('Stack trace:', error.stack);
+        });
+}
+   // Function to fetch and parse a single Markdown file
+   const fetchMarkdownFile = async (filename) => {
+    const url = `/../content/${filename}`;
+    console.log(`Attempting to fetch Markdown file from: ${url}`);
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status} for ${url}`);
+        }
+        const text = await response.text();
+        console.log(`Successfully fetched ${filename}`);
+        return parseMarkdown(text);
+    } catch (error) {
+        console.error(`Error fetching ${filename}:`, error);
+        console.log('Full URL:', new URL(url, window.location.href).href);
+        throw error;
+    }
+};
+
+// Function to parse Markdown and extract metadata
+const parseMarkdown = (markdown) => {
+    const lines = markdown.split('\n');
+    const metadata = {};
+    let content = '';
+    let inMetadata = false;
+
+    for (const line of lines) {
+        if (line.trim() === '---') {
+            inMetadata = !inMetadata;
+            continue;
+        }
+        if (inMetadata) {
+            const [key, value] = line.split(':').map(s => s.trim());
+            metadata[key] = value;
+        } else {
+            content += line + '\n';
+        }
+    }
+
+    return { ...metadata, content: content.trim() };
+};
 
 function loadRecapNavigation(data) {
     const navMenu = document.getElementById('recap-nav');
@@ -99,20 +188,20 @@ function loadSingleRecap(recapId) {
 window.addEventListener('DOMContentLoaded', () => {
     // Check if we're on the homepage
     if (document.getElementById('latest-news')) {
-        loadContent('news', true);
+        loadContentJson('news', true);
     }
     if (document.getElementById('latest-recaps')) {
-        loadContent('recaps', true);
+        loadContentMd('recaps', true);
     }
 
     // Check if we're on the full news page
     if (document.getElementById('news-container')) {
-        loadContent('news');
+        loadContentJson('news');
     }
 
     // Check if we're on the recaps page
     if (document.getElementById('recaps-container')) {
-        loadContent('recaps');
+        loadContentMd('recaps');
     }
 
     // Check if we're on a single recap page
