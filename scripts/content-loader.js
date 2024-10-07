@@ -1,4 +1,8 @@
-function createContentElement(item, isTruncated = false, contentType) {
+import { parseMarkdown } from './markdownParser.js';
+import DOMPurify from 'https://cdn.skypack.dev/dompurify';
+
+
+function createContentElementJson(item, isTruncated = false, contentType) {
     const contentElement = document.createElement('article');
     contentElement.className = `${contentType}-item`;
 
@@ -14,7 +18,7 @@ function createContentElement(item, isTruncated = false, contentType) {
 
     const textElement = document.createElement('p');
     if (isTruncated) {
-        textElement.textContent = item.content.slice(0, 150) + '...';
+        textElement.textContent = item.content.slice(0, 500) + '...';
         
         const readMoreLink = document.createElement('a');
         readMoreLink.href = `/../${contentType}.html`;
@@ -25,6 +29,38 @@ function createContentElement(item, isTruncated = false, contentType) {
         textElement.appendChild(readMoreLink);
     } else {
         textElement.textContent = item.content;
+    }
+    contentElement.appendChild(textElement);
+
+    return contentElement;
+}
+
+function createContentElementMarkdown(item, isTruncated = false, contentType) {
+    const contentElement = document.createElement('article');
+    contentElement.className = `${contentType}-item`;
+
+    const titleElement = document.createElement('h2');
+    titleElement.textContent = item.title;
+    contentElement.appendChild(titleElement);
+
+    const dateElement = document.createElement('p');
+    dateElement.className = 'item-date';
+    const date = new Date(item.date);
+    dateElement.textContent = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    contentElement.appendChild(dateElement);
+
+    const textElement = document.createElement('div');
+    if (isTruncated) {
+        textElement.innerHTML = item.content.slice(0, 500) + '...';
+        
+        const readMoreLink = document.createElement('a');
+        readMoreLink.href = `/../${contentType}.html`;
+        readMoreLink.textContent = 'Read More';
+        readMoreLink.className = 'read-more';
+        
+        textElement.appendChild(readMoreLink);
+    } else {
+        textElement.innerHTML = DOMPurify.sanitize(item.content);
     }
     contentElement.appendChild(textElement);
 
@@ -45,18 +81,18 @@ function loadContentJson(contentType, isTruncated = false) {
                 if (isTruncated) {
                     // For homepage, only show the latest item
                     const latestItem = data[0];
-                    const itemElement = createContentElement(latestItem, true, contentType);
+                    const itemElement = createContentElementJson(latestItem, true, contentType);
                     contentContainer.appendChild(itemElement);
                 } else if (contentType === 'news') {
                     // For full news page, show all items
                     data.forEach(item => {
-                        const itemElement = createContentElement(item, false, contentType);
+                        const itemElement = createContentElementJson(item, false, contentType);
                         contentContainer.appendChild(itemElement);
                     });
                 } else if (contentType === 'recaps') {
                     // For recaps page, show only the latest recap
                     const latestRecap = data[0];
-                    const recapElement = createContentElement(latestRecap, false, contentType);
+                    const recapElement = createContentElementMarkdown(latestRecap, false, contentType);
                     contentContainer.appendChild(recapElement);
                     loadRecapNavigation(data);
                 }
@@ -66,6 +102,7 @@ function loadContentJson(contentType, isTruncated = false) {
 }
 
 function loadContentMd(contentType, isTruncated = false) {
+    console.log(`Loading content for type: ${contentType}, isTruncated: ${isTruncated}`);
     const containerSelector = isTruncated ? `latest-${contentType}` : `${contentType}-container`;
     const contentContainer = document.getElementById(containerSelector);
 
@@ -74,56 +111,48 @@ function loadContentMd(contentType, isTruncated = false) {
         return;
     }
 
-    const listUrl = `/../content/${contentType}.json`;
-    console.log(`Attempting to fetch list from: ${listUrl}`);
-
-    fetch(listUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status} for ${listUrl}`);
-            }
-            return response.json();
-        })
+    fetch(`/content/${contentType}.json`)
+        .then(response => response.json())
         .then(async fileList => {
-            console.log(`Successfully fetched file list for ${contentType}:`, fileList);
+            console.log(`File list loaded:`, fileList);
             fileList.sort((a, b) => new Date(b.date) - new Date(a.date));
 
             if (isTruncated || contentType === 'recaps') {
                 const fileToLoad = fileList[0];
-                console.log(`Attempting to fetch file: ${fileToLoad.filename}`);
+                console.log(`Attempting to load file: ${fileToLoad.filename}`);
                 const item = await fetchMarkdownFile(fileToLoad.filename);
-                const itemElement = createContentElement(item, isTruncated, contentType);
+                console.log(`Loaded item:`, item);
+                const itemElement = createContentElementMarkdown(item, isTruncated, contentType);
                 contentContainer.appendChild(itemElement);
 
                 if (contentType === 'recaps' && !isTruncated) {
                     loadRecapNavigation(fileList);
                 }
-            } else if (contentType === 'news') {
-                for (const file of fileList) {
-                    console.log(`Attempting to fetch file: ${file.filename}`);
-                    const item = await fetchMarkdownFile(file.filename);
-                    const itemElement = createContentElement(item, false, contentType);
-                    contentContainer.appendChild(itemElement);
-                }
             }
         })
         .catch(error => {
             console.error(`Error in loadContent for ${contentType}:`, error);
-            console.log('Stack trace:', error.stack);
         });
 }
-   // Function to fetch and parse a single Markdown file
-   const fetchMarkdownFile = async (filename) => {
-    const url = `/../content/${filename}`;
+const fetchMarkdownFile = async (filename) => {
+    const url = `/content/recaps/${filename}`;
     console.log(`Attempting to fetch Markdown file from: ${url}`);
     try {
         const response = await fetch(url);
+        console.log(`Fetch response status: ${response.status}`);
+        console.log(`Fetch response headers:`, Object.fromEntries(response.headers));
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status} for ${url}`);
         }
+        
         const text = await response.text();
-        console.log(`Successfully fetched ${filename}`);
-        return parseMarkdown(text);
+        console.log(`Successfully fetched ${filename}. First 100 characters:`, text.substring(0, 100));
+        
+        const parsed = parseMarkdown(text);
+        console.log(`Parsed markdown:`, parsed);
+        
+        return parsed;
     } catch (error) {
         console.error(`Error fetching ${filename}:`, error);
         console.log('Full URL:', new URL(url, window.location.href).href);
@@ -131,28 +160,6 @@ function loadContentMd(contentType, isTruncated = false) {
     }
 };
 
-// Function to parse Markdown and extract metadata
-const parseMarkdown = (markdown) => {
-    const lines = markdown.split('\n');
-    const metadata = {};
-    let content = '';
-    let inMetadata = false;
-
-    for (const line of lines) {
-        if (line.trim() === '---') {
-            inMetadata = !inMetadata;
-            continue;
-        }
-        if (inMetadata) {
-            const [key, value] = line.split(':').map(s => s.trim());
-            metadata[key] = value;
-        } else {
-            content += line + '\n';
-        }
-    }
-
-    return { ...metadata, content: content.trim() };
-};
 
 function loadRecapNavigation(data) {
     const navMenu = document.getElementById('recap-nav');
@@ -170,14 +177,19 @@ function loadRecapNavigation(data) {
 function loadSingleRecap(recapId) {
     fetch('/../content/recaps.json')
         .then(response => response.json())
-        .then(data => {
+        .then(async data => {
             const recap = data.find(item => item.id === parseInt(recapId));
             if (recap) {
+                console.log("Found recap with id " + recapId);
                 const container = document.getElementById('recap-container');
-                const recapElement = createContentElement(recap, false, 'recaps');
-                container.appendChild(recapElement);
+                const item = await fetchMarkdownFile(recap.filename);
+                console.log(`Loaded item:`, item);
+                const itemElement = createContentElementMarkdown(item, false, "recap");
+                container.appendChild(itemElement);
             }
-
+            else {
+                console.log("Did not find recap with id " + recapId);
+            }
             // Load navigation for single recap page
             loadRecapNavigation(data);
         })

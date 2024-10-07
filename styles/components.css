@@ -1,4 +1,4 @@
-.grid-item, .news-item, .recaps-item {
+.grid-item, .news-item, .recaps-item, .recap-item {
     background: #F2E9DC;
     border-radius: 5px;
     padding: 20px;
@@ -6,7 +6,7 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.grid-item h2, .news-item h2, .recaps-item h2 {
+.grid-item h2, .news-item h2, .recaps-item h2, .recap-item h2 {
     margin-top: 0;
     color: #91C499;
 }
