@@ -1,40 +1,6 @@
 import { parseMarkdown } from './markdownParser.js';
 import DOMPurify from 'https://cdn.skypack.dev/dompurify';
 
-
-function createContentElementJson(item, isTruncated = false, contentType) {
-    const contentElement = document.createElement('article');
-    contentElement.className = `${contentType}-item`;
-
-    const titleElement = document.createElement('h2');
-    titleElement.textContent = item.title;
-    contentElement.appendChild(titleElement);
-
-    const dateElement = document.createElement('p');
-    dateElement.className = 'item-date';
-    const date = new Date(item.date);
-    dateElement.textContent = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    contentElement.appendChild(dateElement);
-
-    const textElement = document.createElement('p');
-    if (isTruncated) {
-        textElement.textContent = item.content.slice(0, 500) + '...';
-        
-        const readMoreLink = document.createElement('a');
-        readMoreLink.href = `/../${contentType}.html`;
-        readMoreLink.textContent = 'Read More';
-        readMoreLink.className = 'read-more';
-        
-        textElement.appendChild(document.createElement('br'));
-        textElement.appendChild(readMoreLink);
-    } else {
-        textElement.textContent = item.content;
-    }
-    contentElement.appendChild(textElement);
-
-    return contentElement;
-}
-
 function createContentElementMarkdown(item, isTruncated = false, contentType) {
     const contentElement = document.createElement('article');
     contentElement.className = `${contentType}-item`;
@@ -67,40 +33,6 @@ function createContentElementMarkdown(item, isTruncated = false, contentType) {
     return contentElement;
 }
 
-function loadContentJson(contentType, isTruncated = false) {
-    fetch(`/../content/${contentType}.json`)
-        .then(response => response.json())
-        .then(data => {
-            // Sort items by date, most recent first
-            data.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            const containerSelector = isTruncated ? `latest-${contentType}` : `${contentType}-container`;
-            const contentContainer = document.getElementById(containerSelector);
-            
-            if (contentContainer) {
-                if (isTruncated) {
-                    // For homepage, only show the latest item
-                    const latestItem = data[0];
-                    const itemElement = createContentElementJson(latestItem, true, contentType);
-                    contentContainer.appendChild(itemElement);
-                } else if (contentType === 'news') {
-                    // For full news page, show all items
-                    data.forEach(item => {
-                        const itemElement = createContentElementJson(item, false, contentType);
-                        contentContainer.appendChild(itemElement);
-                    });
-                } else if (contentType === 'recaps') {
-                    // For recaps page, show only the latest recap
-                    const latestRecap = data[0];
-                    const recapElement = createContentElementMarkdown(latestRecap, false, contentType);
-                    contentContainer.appendChild(recapElement);
-                    loadRecapNavigation(data);
-                }
-            }
-        })
-        .catch(error => console.error(`Error loading ${contentType}:`, error));
-}
-
 function loadContentMd(contentType, isTruncated = false) {
     console.log(`Loading content for type: ${contentType}, isTruncated: ${isTruncated}`);
     const containerSelector = isTruncated ? `latest-${contentType}` : `${contentType}-container`;
@@ -117,10 +49,11 @@ function loadContentMd(contentType, isTruncated = false) {
             console.log(`File list loaded:`, fileList);
             fileList.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+            // If truncated or if we're on the recaps page, want to load only the first item
             if (isTruncated || contentType === 'recaps') {
                 const fileToLoad = fileList[0];
                 console.log(`Attempting to load file: ${fileToLoad.filename}`);
-                const item = await fetchMarkdownFile(fileToLoad.filename);
+                const item = await fetchMarkdownFile(contentType, fileToLoad.filename);
                 console.log(`Loaded item:`, item);
                 const itemElement = createContentElementMarkdown(item, isTruncated, contentType);
                 contentContainer.appendChild(itemElement);
@@ -129,13 +62,21 @@ function loadContentMd(contentType, isTruncated = false) {
                     loadRecapNavigation(fileList);
                 }
             }
+            // Else, want to load everything
+            else (
+                fileList.forEach(async file => {
+                    const item = await fetchMarkdownFile(contentType, file.filename);
+                    const itemElement = createContentElementMarkdown(item, isTruncated, contentType);
+                    contentContainer.appendChild(itemElement);
+                })
+            )
         })
         .catch(error => {
             console.error(`Error in loadContent for ${contentType}:`, error);
         });
 }
-const fetchMarkdownFile = async (filename) => {
-    const url = `/content/recaps/${filename}`;
+const fetchMarkdownFile = async (contentType, filename) => {
+    const url = `/content/${contentType}/${filename}`;
     console.log(`Attempting to fetch Markdown file from: ${url}`);
     try {
         const response = await fetch(url);
@@ -182,7 +123,7 @@ function loadSingleRecap(recapId) {
             if (recap) {
                 console.log("Found recap with id " + recapId);
                 const container = document.getElementById('recap-container');
-                const item = await fetchMarkdownFile(recap.filename);
+                const item = await fetchMarkdownFile("recaps", recap.filename);
                 console.log(`Loaded item:`, item);
                 const itemElement = createContentElementMarkdown(item, false, "recap");
                 container.appendChild(itemElement);
@@ -200,7 +141,7 @@ function loadSingleRecap(recapId) {
 window.addEventListener('DOMContentLoaded', () => {
     // Check if we're on the homepage
     if (document.getElementById('latest-news')) {
-        loadContentJson('news', true);
+        loadContentMd('news', true);
     }
     if (document.getElementById('latest-recaps')) {
         loadContentMd('recaps', true);
@@ -208,7 +149,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Check if we're on the full news page
     if (document.getElementById('news-container')) {
-        loadContentJson('news');
+        loadContentMd('news');
     }
 
     // Check if we're on the recaps page
